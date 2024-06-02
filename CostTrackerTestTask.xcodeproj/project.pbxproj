@@ -12,6 +12,12 @@
 		A51E8E1C2C0A838700840C83 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E8E1B2C0A838700840C83 /* ViewController.swift */; };
 		A51E8E222C0A838700840C83 /* CostTrackerTestTask.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A51E8E202C0A838700840C83 /* CostTrackerTestTask.xcdatamodeld */; };
 		A51E8E242C0A838800840C83 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A51E8E232C0A838800840C83 /* Assets.xcassets */; };
+		A51E8E342C0A8E6100840C83 /* ApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E8E332C0A8E6100840C83 /* ApiResponse.swift */; };
+		A51E8E372C0B094900840C83 /* ApiErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E8E362C0B094900840C83 /* ApiErrors.swift */; };
+		A51E8E392C0B162700840C83 /* BitcoinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E8E382C0B162700840C83 /* BitcoinView.swift */; };
+		A51E8E3B2C0B1DD000840C83 /* BitcoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E8E3A2C0B1DD000840C83 /* BitcoinViewController.swift */; };
+		A51E8E3E2C0BDE1100840C83 /* AddTransactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E8E3D2C0BDE1100840C83 /* AddTransactionViewController.swift */; };
+		A51E8E432C0C8FEE00840C83 /* ApiBitcoinManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E8E422C0C8FEE00840C83 /* ApiBitcoinManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +28,12 @@
 		A51E8E212C0A838700840C83 /* CostTrackerTestTask.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CostTrackerTestTask.xcdatamodel; sourceTree = "<group>"; };
 		A51E8E232C0A838800840C83 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A51E8E282C0A838800840C83 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A51E8E332C0A8E6100840C83 /* ApiResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiResponse.swift; sourceTree = "<group>"; };
+		A51E8E362C0B094900840C83 /* ApiErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiErrors.swift; sourceTree = "<group>"; };
+		A51E8E382C0B162700840C83 /* BitcoinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinView.swift; sourceTree = "<group>"; };
+		A51E8E3A2C0B1DD000840C83 /* BitcoinViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinViewController.swift; sourceTree = "<group>"; };
+		A51E8E3D2C0BDE1100840C83 /* AddTransactionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionViewController.swift; sourceTree = "<group>"; };
+		A51E8E422C0C8FEE00840C83 /* ApiBitcoinManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiBitcoinManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +66,11 @@
 		A51E8E162C0A838700840C83 /* CostTrackerTestTask */ = {
 			isa = PBXGroup;
 			children = (
+				A51E8E352C0B093800840C83 /* Errors */,
+				A51E8E322C0A8E5700840C83 /* Models */,
+				A51E8E2F2C0A8D1200840C83 /* Utilities */,
+				A51E8E3C2C0B37D200840C83 /* ViewController */,
+				A51E8E2E2C0A8AB000840C83 /* Views */,
 				A51E8E172C0A838700840C83 /* AppDelegate.swift */,
 				A51E8E192C0A838700840C83 /* SceneDelegate.swift */,
 				A51E8E1B2C0A838700840C83 /* ViewController.swift */,
@@ -62,6 +79,47 @@
 				A51E8E202C0A838700840C83 /* CostTrackerTestTask.xcdatamodeld */,
 			);
 			path = CostTrackerTestTask;
+			sourceTree = "<group>";
+		};
+		A51E8E2E2C0A8AB000840C83 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A51E8E382C0B162700840C83 /* BitcoinView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A51E8E2F2C0A8D1200840C83 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				A51E8E422C0C8FEE00840C83 /* ApiBitcoinManager.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		A51E8E322C0A8E5700840C83 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A51E8E332C0A8E6100840C83 /* ApiResponse.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A51E8E352C0B093800840C83 /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				A51E8E362C0B094900840C83 /* ApiErrors.swift */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
+		A51E8E3C2C0B37D200840C83 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				A51E8E3A2C0B1DD000840C83 /* BitcoinViewController.swift */,
+				A51E8E3D2C0BDE1100840C83 /* AddTransactionViewController.swift */,
+			);
+			path = ViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -133,10 +191,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A51E8E372C0B094900840C83 /* ApiErrors.swift in Sources */,
 				A51E8E222C0A838700840C83 /* CostTrackerTestTask.xcdatamodeld in Sources */,
 				A51E8E1C2C0A838700840C83 /* ViewController.swift in Sources */,
+				A51E8E3B2C0B1DD000840C83 /* BitcoinViewController.swift in Sources */,
+				A51E8E342C0A8E6100840C83 /* ApiResponse.swift in Sources */,
+				A51E8E432C0C8FEE00840C83 /* ApiBitcoinManager.swift in Sources */,
 				A51E8E182C0A838700840C83 /* AppDelegate.swift in Sources */,
+				A51E8E3E2C0BDE1100840C83 /* AddTransactionViewController.swift in Sources */,
 				A51E8E1A2C0A838700840C83 /* SceneDelegate.swift in Sources */,
+				A51E8E392C0B162700840C83 /* BitcoinView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
