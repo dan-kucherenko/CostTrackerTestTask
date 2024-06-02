@@ -8,26 +8,41 @@
 import Foundation
 import UIKit
 
-class BitcoinViewController: UIViewController {
+class BalanceViewController: UIViewController {
+    // MARK: - Cell identifier
+    private let cellIdentifier = "transactionCell"
+    
+    // MARK: - UI elements
     private let btcRateLbl = UILabel()
     private let balanceLbl = UILabel()
     private let replenishBalanceBtn = UIButton()
     private lazy var balanceStackView = UIStackView(arrangedSubviews: [balanceLbl, replenishBalanceBtn])
     private let addTransactionBtn = UIButton()
+    private let transactionsTable = UITableView()
+    
+    
+    // MARK: - Fields for view
+    private var transactions: [Transaction] = []
+    private var balance: [Balance] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        transactions = CoreDataManager.shared.fetchAll(Transaction.self)
         setupView()
     }
     
     // MARK: - Setup view
     private func setupView() {
         self.view.backgroundColor = .black
-
+        
         setupBtcRateLabel()
         setupBalanceLabel()
         setupTheStackView()
         setupTransactionButton()
+        setupTransactionsTable()
+        
+        fetchBalance()
     }
     
     // MARK: - Bitcoin rate label
@@ -52,10 +67,10 @@ class BitcoinViewController: UIViewController {
         balanceStackView.axis = .horizontal
         balanceStackView.spacing = 8
         balanceStackView.alignment = .center
-    
+        
         setupBalanceLabel()
         setupReplenishButton()
-    
+        
         balanceStackView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(balanceStackView)
         
@@ -114,6 +129,25 @@ class BitcoinViewController: UIViewController {
         return ""
     }
     
+    // MARK: - Transactions table configuration
+    private func setupTransactionsTable() {
+        transactionsTable.backgroundColor = .black
+        transactionsTable.register(TransactionTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        
+        self.transactionsTable.delegate = self
+        self.transactionsTable.dataSource = self
+        
+        transactionsTable.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(transactionsTable)
+        
+        NSLayoutConstraint.activate([
+            transactionsTable.topAnchor.constraint(equalTo: addTransactionBtn.bottomAnchor, constant: 5),
+            transactionsTable.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            transactionsTable.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            transactionsTable.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+        ])
+    }
+    
     @objc
     private func addTransactionClicked() {
         self.navigationController?.pushViewController(AddTransactionViewController(), animated: true)
@@ -131,7 +165,16 @@ class BitcoinViewController: UIViewController {
             input.keyboardType = .decimalPad
         }
         
-        let submitAction = UIAlertAction(title: "Submit", style: .default, handler: nil)
+        let submitAction = UIAlertAction(title: "Submit", style: .default) { [weak self] _ in
+            guard let self else { return }
+            guard let amountText = replenishBalanceController.textFields?[0].text,
+                  let amount = Double(amountText), amount > 0 else {
+                presentAnErrorAlert()
+                return
+            }
+            CoreDataManager.shared.updateBalance(newBalance: amount)
+            fetchBalance()
+        }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
         replenishBalanceController.addAction(submitAction)
@@ -139,8 +182,56 @@ class BitcoinViewController: UIViewController {
         
         present(replenishBalanceController, animated: true, completion: nil)
     }
+    
+    private func presentAnErrorAlert() {
+        let wrongAlertController = UIAlertController(
+            title: "Wrong amount for transaction",
+            message: "Please, enter a valid number (no negative numbers or zero)",
+            preferredStyle: .alert
+        )
+        let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        wrongAlertController.addAction(cancelAction)
+        
+        present(wrongAlertController, animated: true, completion: nil)
+    }
+    
+    private func fetchBalance() {
+        self.balance = CoreDataManager.shared.fetchAll(Balance.self)
+        
+        if self.balance.isEmpty {
+            let initialBalance = Balance(context: CoreDataManager.shared.context)
+            initialBalance.bitcoins = 0.0
+            CoreDataManager.shared.saveContext()
+            self.balance = [initialBalance]
+        }
+        
+        DispatchQueue.main.async {
+            self.balanceLbl.text = "\(String(describing: self.balance.first!.bitcoins)) ₿"
+            self.transactionsTable.reloadData()
+        }
+    }
+    
 }
 
+// MARK: - UITableViewDelegate
+extension BalanceViewController: UITableViewDelegate {
+    
+}
+
+// MARK: - UITableViewDataSource
+extension BalanceViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        transactions.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! TransactionTableViewCell
+        cell.configure(with: transactions[indexPath.row])
+        return cell
+    }
+}
+
+
 #Preview {
-    BitcoinViewController()
+    BalanceViewController()
 }
