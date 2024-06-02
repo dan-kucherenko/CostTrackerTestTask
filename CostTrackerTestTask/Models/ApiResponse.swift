@@ -12,7 +12,11 @@ struct ApiResponse: Codable {
 }
 
 struct BpiResponse: Codable {
-    let USD: Currency
+    let usd: Currency
+    
+    enum CodingKeys: String, CodingKey {
+        case usd = "USD"
+    }
 }
 
 struct Currency: Codable {
