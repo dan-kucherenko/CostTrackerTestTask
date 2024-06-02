@@ -14,7 +14,6 @@
 		A51E8E242C0A838800840C83 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A51E8E232C0A838800840C83 /* Assets.xcassets */; };
 		A51E8E342C0A8E6100840C83 /* ApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E8E332C0A8E6100840C83 /* ApiResponse.swift */; };
 		A51E8E372C0B094900840C83 /* ApiErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E8E362C0B094900840C83 /* ApiErrors.swift */; };
-		A51E8E392C0B162700840C83 /* BitcoinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E8E382C0B162700840C83 /* BitcoinView.swift */; };
 		A51E8E3B2C0B1DD000840C83 /* BitcoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E8E3A2C0B1DD000840C83 /* BitcoinViewController.swift */; };
 		A51E8E3E2C0BDE1100840C83 /* AddTransactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E8E3D2C0BDE1100840C83 /* AddTransactionViewController.swift */; };
 		A51E8E432C0C8FEE00840C83 /* ApiBitcoinManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E8E422C0C8FEE00840C83 /* ApiBitcoinManager.swift */; };
@@ -31,7 +30,6 @@
 		A51E8E282C0A838800840C83 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A51E8E332C0A8E6100840C83 /* ApiResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiResponse.swift; sourceTree = "<group>"; };
 		A51E8E362C0B094900840C83 /* ApiErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiErrors.swift; sourceTree = "<group>"; };
-		A51E8E382C0B162700840C83 /* BitcoinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinView.swift; sourceTree = "<group>"; };
 		A51E8E3A2C0B1DD000840C83 /* BitcoinViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinViewController.swift; sourceTree = "<group>"; };
 		A51E8E3D2C0BDE1100840C83 /* AddTransactionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionViewController.swift; sourceTree = "<group>"; };
 		A51E8E422C0C8FEE00840C83 /* ApiBitcoinManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiBitcoinManager.swift; sourceTree = "<group>"; };
@@ -86,7 +84,6 @@
 		A51E8E2E2C0A8AB000840C83 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				A51E8E382C0B162700840C83 /* BitcoinView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -203,7 +200,6 @@
 				A51E8E182C0A838700840C83 /* AppDelegate.swift in Sources */,
 				A51E8E3E2C0BDE1100840C83 /* AddTransactionViewController.swift in Sources */,
 				A51E8E1A2C0A838700840C83 /* SceneDelegate.swift in Sources */,
-				A51E8E392C0B162700840C83 /* BitcoinView.swift in Sources */,
 				A51E8E472C0CA17A00840C83 /* Category.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -335,6 +331,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 45XHL54QD5;
@@ -351,6 +348,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ua.edu.ukma.kucherenko.CostTrackerTestTask;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -362,6 +360,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 45XHL54QD5;
@@ -378,6 +377,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ua.edu.ukma.kucherenko.CostTrackerTestTask;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
