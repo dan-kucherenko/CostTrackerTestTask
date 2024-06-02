@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 class AddTransactionViewController: UIViewController {
+    // MARK: - UI fields
     private let transactionAmountField = UITextField()
     private let categoryPicker = UIPickerView()
     private let addTransaction = UIButton()
@@ -26,10 +27,12 @@ class AddTransactionViewController: UIViewController {
         setupAddTransactionButton()
     }
     
+    // MARK: - Input field for transaction amount
     private func setupInputField() {
         transactionAmountField.placeholder = "Enter the transaction amount…"
         transactionAmountField.borderStyle = .roundedRect
         transactionAmountField.layer.cornerRadius = 15
+        transactionAmountField.keyboardType = .decimalPad
         
         
         transactionAmountField.translatesAutoresizingMaskIntoConstraints = false
@@ -41,6 +44,7 @@ class AddTransactionViewController: UIViewController {
         ])
     }
     
+    // MARK: - Category picker setup
     private func setupCategoryPicker() {
         categoryPicker.delegate = self
         categoryPicker.dataSource = self
@@ -54,9 +58,11 @@ class AddTransactionViewController: UIViewController {
         ])
     }
     
+    // MARK: - Add transaction
     private func setupAddTransactionButton() {
         addTransaction.setTitle("Add", for: .normal)
         addTransaction.setTitleColor(.secondaryLabel, for: .normal)
+        addTransaction.titleLabel?.font = .systemFont(ofSize: 20, weight: .semibold)
         addTransaction.layer.borderWidth = 2.0
         addTransaction.layer.cornerRadius = 10.0
         addTransaction.layer.borderColor = UIColor.secondarySystemBackground.cgColor
@@ -79,10 +85,11 @@ class AddTransactionViewController: UIViewController {
             presentAnErrorAlert()
             return
         }
-        
+        // TODO: add work with core data
         navigationController?.popToRootViewController(animated: true)
     }
     
+    // MARK: - Func for alerting an error
     private func presentAnErrorAlert() {
         let wrongAlertController = UIAlertController(
             title: "Wrong amount for transaction",
