@@ -23,6 +23,8 @@ class BalanceViewController: UIViewController {
     
     // MARK: - Fields for view
     private var transactions: [Transaction] = []
+    private var sections: [String: [Transaction]] = [:]
+    private var sortedSectionKeys: [String] = []
     private var balance: Balance?
     private var rate = ""
     private var timeOfLastUpdate: Date?
@@ -206,17 +208,28 @@ class BalanceViewController: UIViewController {
     
     private func fetchTransactions() {
         if transactionOffset % 20 == 0 {
-            print("Loading more transactions with offset \(transactionOffset)")
             if let fetchedTransactions = CoreDataManager.shared.fetchTransactions(limit: transactionsLimit, offset: transactionOffset) {
                 if !fetchedTransactions.isEmpty {
                     transactions += fetchedTransactions
                     transactionOffset += fetchedTransactions.count
+                    groupTransactionsByDate()
                     DispatchQueue.main.async {
                         self.transactionsTable.reloadData()
                     }
                 }
             }
         }
+    }
+    
+    private func groupTransactionsByDate() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+
+        sections = Dictionary(grouping: transactions) { transaction in
+            return dateFormatter.string(from: transaction.date ?? Date())
+        }
+        
+        sortedSectionKeys = sections.keys.sorted(by: { $0 > $1 })
     }
     
     private func presentAnErrorAlert() {
@@ -250,7 +263,6 @@ class BalanceViewController: UIViewController {
         let storedRate = defaults.string(forKey: "bitcoinRate")
         
         if timeOfLastUpdate == nil || storedRate == nil || Date().timeIntervalSince(timeOfLastUpdate!) >= 3600 {
-            print("Updating the rate")
             Task {
                 self.rate = await getBtcRateData() ?? ""
                 defaults.set(Date(), forKey: "timeOfLastUpdate")
@@ -260,7 +272,6 @@ class BalanceViewController: UIViewController {
                 }
             }
         } else {
-            print("No need to update, get from the user defaults")
             self.rate = storedRate ?? "0"
             self.btcRateLbl.text = "$ \(self.rate)"
         }
@@ -281,13 +292,25 @@ extension BalanceViewController: UITableViewDelegate {
 
 // MARK: - UITableViewDataSource
 extension BalanceViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return sortedSectionKeys.count
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        transactions.count
+        let sectionKey = sortedSectionKeys[section]
+        return sections[sectionKey]?.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return sortedSectionKeys[section]
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! TransactionTableViewCell
-        cell.configure(with: transactions[indexPath.row])
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! TransactionTableViewCell
+        let sectionKey = sortedSectionKeys[indexPath.section]
+        if let transaction = sections[sectionKey]?[indexPath.row] {
+            cell.configure(with: transaction)
+        }
         return cell
     }
 }
