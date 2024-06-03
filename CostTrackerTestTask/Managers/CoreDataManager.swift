@@ -32,10 +32,6 @@ class CoreDataManager {
         }
     }
     
-    func saveContext() {
-        try? context.save()
-    }
-    
     func fetchBalance() -> Balance? {
          let fetchRequest: NSFetchRequest<Balance> = Balance.fetchRequest()
          
@@ -82,6 +78,10 @@ class CoreDataManager {
         } catch {
             print("Failed to update balance: \(error.localizedDescription)")
         }
+    }
+    
+    func saveContext() {
+        try? context.save()
     }
 }
 

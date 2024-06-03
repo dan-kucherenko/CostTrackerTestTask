@@ -177,12 +177,7 @@ class BalanceViewController: UIViewController {
             }
             CoreDataManager.shared.updateBalance(by: amount)
             
-            let transaction = Transaction(context: CoreDataManager.shared.context)
-            transaction.amount = amount
-            transaction.category = "replanishing"
-            transaction.date = Date()
-            
-            CoreDataManager.shared.saveContext()
+            createTransaction(amount: amount, category: "replanishing")
             transactionConfirmation()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -232,6 +227,15 @@ class BalanceViewController: UIViewController {
         wrongAlertController.addAction(cancelAction)
         
         present(wrongAlertController, animated: true, completion: nil)
+    }
+    
+    private func createTransaction(amount: Double, category: String, date: Date = Date()) {
+        let transaction = Transaction(context: CoreDataManager.shared.context)
+        transaction.amount = amount
+        transaction.category = category
+        transaction.date = date
+        
+        CoreDataManager.shared.saveContext()
     }
 }
 
