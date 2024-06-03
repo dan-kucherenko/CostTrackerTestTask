@@ -23,7 +23,7 @@ class ApiBitcoinManager {
             let decoder = JSONDecoder()
             do {
                 let decodedData = try decoder.decode(ApiResponse.self, from: btcRateResponse)
-                return decodedData.bpi.USD.rate
+                return decodedData.bpi.usd.rate
             } catch {
                 throw ApiErrors.decodingError("Error decoding the data")
             }

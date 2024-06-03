@@ -42,7 +42,7 @@ class TransactionTableViewCell: UITableViewCell {
         
         NSLayoutConstraint.activate([
             category.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            category.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15)
+            category.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15)
         ])
     }
     
@@ -59,7 +59,7 @@ class TransactionTableViewCell: UITableViewCell {
 
         NSLayoutConstraint.activate([
             transactionDate.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            transactionDate.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15)
+            transactionDate.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15)
         ])
     }
     
