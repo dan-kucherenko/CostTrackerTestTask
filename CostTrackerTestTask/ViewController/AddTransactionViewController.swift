@@ -88,7 +88,7 @@ class AddTransactionViewController: UIViewController {
             return
         }
         
-        if let existingBalance = CoreDataManager.shared.fetchBalance(), existingBalance >= transactionAmount {
+        if let existingBalance = CoreDataManager.shared.fetchBalance()?.bitcoins, existingBalance >= transactionAmount {
             let transaction = Transaction(context: CoreDataManager.shared.context)
             transaction.amount = -transactionAmount
             transaction.category = categoryPicker.selectedRow(inComponent: 0).description

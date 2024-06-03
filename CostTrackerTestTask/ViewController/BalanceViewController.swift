@@ -23,12 +23,12 @@ class BalanceViewController: UIViewController {
     
     // MARK: - Fields for view
     private var transactions: [Transaction] = []
-    private var balance: [Balance] = []
+    private var balance: Balance?
+    private let transactionsLimit = 20
+    private var transactionOffset = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        transactions = CoreDataManager.shared.fetchAll(Transaction.self)
         setupView()
     }
     
@@ -43,6 +43,7 @@ class BalanceViewController: UIViewController {
         setupTransactionsTable()
         
         fetchBalance()
+        fetchTransactions()
     }
     
     // MARK: - Bitcoin rate label
@@ -118,17 +119,6 @@ class BalanceViewController: UIViewController {
         ])
     }
     
-    // MARK: - Fetch data from the API
-    private func getBtcRateData() async -> String? {
-        do {
-            let btcRate = try await ApiBitcoinManager.shared.getBitcoinRate()
-            return btcRate
-        } catch {
-            print(error)
-        }
-        return ""
-    }
-    
     // MARK: - Transactions table configuration
     private func setupTransactionsTable() {
         transactionsTable.backgroundColor = .black
@@ -148,9 +138,22 @@ class BalanceViewController: UIViewController {
         ])
     }
     
+    // MARK: - Fetch data from the API
+    private func getBtcRateData() async -> String? {
+        do {
+            let btcRate = try await ApiBitcoinManager.shared.getBitcoinRate()
+            return btcRate
+        } catch {
+            print(error)
+        }
+        return ""
+    }
+    
     @objc
     private func addTransactionClicked() {
-        self.navigationController?.pushViewController(AddTransactionViewController(), animated: true)
+        let addTransactionVc = AddTransactionViewController()
+        addTransactionVc.delegate = self
+        self.navigationController?.pushViewController(addTransactionVc, animated: true)
     }
     
     @objc
@@ -172,8 +175,15 @@ class BalanceViewController: UIViewController {
                 presentAnErrorAlert()
                 return
             }
-            CoreDataManager.shared.updateBalance(newBalance: amount)
-            fetchBalance()
+            CoreDataManager.shared.updateBalance(by: amount)
+            
+            let transaction = Transaction(context: CoreDataManager.shared.context)
+            transaction.amount = amount
+            transaction.category = "replanishing"
+            transaction.date = Date()
+            
+            CoreDataManager.shared.saveContext()
+            transactionConfirmation()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
@@ -181,6 +191,35 @@ class BalanceViewController: UIViewController {
         replenishBalanceController.addAction(cancelAction)
         
         present(replenishBalanceController, animated: true, completion: nil)
+    }
+    
+    private func fetchBalance() {
+        self.balance = CoreDataManager.shared.fetchBalance()
+        
+        guard let balance = self.balance else {
+            let initialBalance = Balance(context: CoreDataManager.shared.context)
+            initialBalance.bitcoins = 0.0
+            CoreDataManager.shared.saveContext()
+            self.balance = initialBalance
+            return
+        }
+        
+        DispatchQueue.main.async {
+            self.balanceLbl.text = "\(String(describing: balance.bitcoins)) ₿"
+            self.transactionsTable.reloadData()
+        }
+    }
+    
+    private func fetchTransactions() {
+        if let fetchedTransactions = CoreDataManager.shared.fetchTransactions(limit: transactionsLimit, offset: transactionOffset) {
+            if !fetchedTransactions.isEmpty {
+                transactions += fetchedTransactions
+                transactionOffset += fetchedTransactions.count
+                DispatchQueue.main.async {
+                    self.transactionsTable.reloadData()
+                }
+            }
+        }
     }
     
     private func presentAnErrorAlert() {
@@ -194,23 +233,6 @@ class BalanceViewController: UIViewController {
         
         present(wrongAlertController, animated: true, completion: nil)
     }
-    
-    private func fetchBalance() {
-        self.balance = CoreDataManager.shared.fetchAll(Balance.self)
-        
-        if self.balance.isEmpty {
-            let initialBalance = Balance(context: CoreDataManager.shared.context)
-            initialBalance.bitcoins = 0.0
-            CoreDataManager.shared.saveContext()
-            self.balance = [initialBalance]
-        }
-        
-        DispatchQueue.main.async {
-            self.balanceLbl.text = "\(String(describing: self.balance.first!.bitcoins)) ₿"
-            self.transactionsTable.reloadData()
-        }
-    }
-    
 }
 
 // MARK: - UITableViewDelegate
@@ -231,6 +253,16 @@ extension BalanceViewController: UITableViewDataSource {
     }
 }
 
+extension BalanceViewController: TransactionDelegate {
+    func transactionConfirmation() {
+        transactionOffset = 0
+        transactions = []
+        fetchTransactions()
+        fetchBalance()
+        
+        transactionsTable.reloadData()
+    }
+}
 
 #Preview {
     BalanceViewController()
