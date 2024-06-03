@@ -89,12 +89,8 @@ class AddTransactionViewController: UIViewController {
         }
         
         if let existingBalance = CoreDataManager.shared.fetchBalance()?.bitcoins, existingBalance >= transactionAmount {
-            let transaction = Transaction(context: CoreDataManager.shared.context)
-            transaction.amount = -transactionAmount
-            transaction.category = categoryPicker.selectedRow(inComponent: 0).description
-            transaction.date = Date()
+            createTransaction(amount: -transactionAmount, category: Category.getCategoryBy(index: categoryPicker.selectedRow(inComponent: 0))?.rawValue ?? "unknown category")
             CoreDataManager.shared.updateBalance(by: -transactionAmount)
-            CoreDataManager.shared.saveContext()
             delegate?.transactionConfirmation()
         } else {
             let wrongAlertController = UIAlertController(
@@ -121,6 +117,15 @@ class AddTransactionViewController: UIViewController {
         wrongAlertController.addAction(cancelAction)
         
         present(wrongAlertController, animated: true, completion: nil)
+    }
+    
+    private func createTransaction(amount: Double, category: String, date: Date = Date()) {
+        let transaction = Transaction(context: CoreDataManager.shared.context)
+        transaction.amount = amount
+        transaction.category = category
+        transaction.date = date
+        
+        CoreDataManager.shared.saveContext()
     }
 }
 
