@@ -21,6 +21,12 @@ class TransactionTableViewCell: UITableViewCell {
     private let amount = UILabel()
     private let color = UIColor(named: "TextColor")
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        transactionDate.text = nil
+        category.text = nil
+        amount.text = nil
+    }
     
     func configure(with transaction: Transaction) {
         self.transaction = transaction
@@ -53,7 +59,7 @@ class TransactionTableViewCell: UITableViewCell {
         let date = formatDate(transaction!.date!)
         transactionDate.text = date
         
-        transactionDate.font = .systemFont(ofSize: 18, weight: .regular)
+        transactionDate.font = .systemFont(ofSize: 15, weight: .regular)
         transactionDate.textColor = color
         
         transactionDate.translatesAutoresizingMaskIntoConstraints = false
@@ -67,7 +73,7 @@ class TransactionTableViewCell: UITableViewCell {
     
     private func formatDate(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy"
+        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm"
         return dateFormatter.string(from: date)
     }
     
