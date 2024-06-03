@@ -7,8 +7,10 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 class AddTransactionViewController: UIViewController {
+    weak var delegate: TransactionDelegate?
     // MARK: - UI fields
     private let transactionAmountField = UITextField()
     private let categoryPicker = UIPickerView()
@@ -85,7 +87,26 @@ class AddTransactionViewController: UIViewController {
             presentAnErrorAlert()
             return
         }
-        // TODO: add work with core data
+        
+        if let existingBalance = CoreDataManager.shared.fetchBalance(), existingBalance >= transactionAmount {
+            let transaction = Transaction(context: CoreDataManager.shared.context)
+            transaction.amount = -transactionAmount
+            transaction.category = categoryPicker.selectedRow(inComponent: 0).description
+            transaction.date = Date()
+            CoreDataManager.shared.updateBalance(by: -transactionAmount)
+            CoreDataManager.shared.saveContext()
+            delegate?.transactionConfirmation()
+        } else {
+            let wrongAlertController = UIAlertController(
+                title: "Not enough money",
+                message: "Please replanish your balance first",
+                preferredStyle: .alert
+            )
+            let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+            
+            wrongAlertController.addAction(cancelAction)
+            present(wrongAlertController, animated: true, completion: nil)
+        }
         navigationController?.popToRootViewController(animated: true)
     }
     
