@@ -36,20 +36,12 @@ class CoreDataManager {
         try? context.save()
     }
     
-    func saveObject<T: NSManagedObject>(_ object: T) {
-        do {
-            try context.save()
-        } catch {
-            print("Failed to save object: \(error.localizedDescription)")
-        }
-    }
-    
-    func fetchBalance() -> Double? {
+    func fetchBalance() -> Balance? {
          let fetchRequest: NSFetchRequest<Balance> = Balance.fetchRequest()
          
          do {
              if let balance = try context.fetch(fetchRequest).first {
-                 return balance.bitcoins
+                 return balance
              } else {
                  print("No balance found")
                  return nil
@@ -60,23 +52,35 @@ class CoreDataManager {
          }
      }
     
-    func updateBalance(by bitcoins: Double) -> Bool {
+    func fetchTransactions(limit: Int, offset: Int) -> [Transaction]? {
+            let fetchRequest: NSFetchRequest<Transaction> = Transaction.fetchRequest()
+            fetchRequest.fetchLimit = limit
+            fetchRequest.fetchOffset = offset
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+            
+            do {
+                let fetchedTransactions = try context.fetch(fetchRequest)
+                return fetchedTransactions
+            } catch {
+                print("Failed to fetch transactions: \(error.localizedDescription)")
+                return nil
+            }
+        }
+    
+    func updateBalance(by bitcoins: Double) {
         let fetchRequest: NSFetchRequest<Balance> = Balance.fetchRequest()
         
         do {
             if let existingBalance = try context.fetch(fetchRequest).first {
                 existingBalance.bitcoins += bitcoins
                 try context.save()
-                return true
             } else {
                 let balance = Balance(context: context)
                 balance.bitcoins = bitcoins
                 print("No balance found to update")
-                return false
             }
         } catch {
             print("Failed to update balance: \(error.localizedDescription)")
-            return false
         }
     }
 }
