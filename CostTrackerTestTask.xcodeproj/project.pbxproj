@@ -82,7 +82,7 @@
 				A51E8E352C0B093800840C83 /* Errors */,
 				A51E8E322C0A8E5700840C83 /* Models */,
 				A51E8E2F2C0A8D1200840C83 /* Managers */,
-				A51E8E3C2C0B37D200840C83 /* ViewController */,
+				A51E8E3C2C0B37D200840C83 /* ViewControllers */,
 				A51E8E2E2C0A8AB000840C83 /* Views */,
 				A51E8E172C0A838700840C83 /* AppDelegate.swift */,
 				A51E8E192C0A838700840C83 /* SceneDelegate.swift */,
@@ -127,13 +127,13 @@
 			path = Errors;
 			sourceTree = "<group>";
 		};
-		A51E8E3C2C0B37D200840C83 /* ViewController */ = {
+		A51E8E3C2C0B37D200840C83 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
 				A51E8E3A2C0B1DD000840C83 /* BalanceViewController.swift */,
 				A51E8E3D2C0BDE1100840C83 /* AddTransactionViewController.swift */,
 			);
-			path = ViewController;
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

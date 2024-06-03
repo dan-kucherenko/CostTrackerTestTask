@@ -16,22 +16,6 @@ class CoreDataManager {
     let context = (UIApplication.shared.delegate as!
                    AppDelegate).persistentContainer.viewContext
     
-    func fetchAll<T: NSManagedObject>(_ objectType: T.Type) -> [T] {
-        let entityName = String(describing: objectType)
-        let fetchRequest = NSFetchRequest<T>(entityName: entityName)
-        if T.self == Transaction.self {
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
-        }
-        
-        do {
-            let fetchedObjects = try context.fetch(fetchRequest)
-            return fetchedObjects
-        } catch {
-            print("Failed to fetch \(entityName): \(error.localizedDescription)")
-            return []
-        }
-    }
-    
     func fetchBalance() -> Balance? {
          let fetchRequest: NSFetchRequest<Balance> = Balance.fetchRequest()
          
