@@ -24,6 +24,8 @@ class BalanceViewController: UIViewController {
     // MARK: - Fields for view
     private var transactions: [Transaction] = []
     private var balance: Balance?
+    private var rate = ""
+    private var timeOfLastUpdate: Date?
     private let transactionsLimit = 20
     private var transactionOffset = 0
     
@@ -48,9 +50,7 @@ class BalanceViewController: UIViewController {
     
     // MARK: - Bitcoin rate label
     private func setupBtcRateLabel() {
-        Task {
-            btcRateLbl.text = "$ \(await getBtcRateData() ?? "0.0")"
-        }
+        updateBtcRate()
         btcRateLbl.textColor = .secondaryLabel
         btcRateLbl.font = .systemFont(ofSize: 20)
         
@@ -141,8 +141,7 @@ class BalanceViewController: UIViewController {
     // MARK: - Fetch data from the API
     private func getBtcRateData() async -> String? {
         do {
-            let btcRate = try await ApiBitcoinManager.shared.getBitcoinRate()
-            return btcRate
+            return try await ApiBitcoinManager.shared.getBitcoinRate()
         } catch {
             print(error)
         }
@@ -239,6 +238,32 @@ class BalanceViewController: UIViewController {
         transaction.date = date
         
         CoreDataManager.shared.saveContext()
+    }
+    
+    private func updateBtcRate() {
+        let defaults = UserDefaults.standard
+        
+        if let lastUpdate = defaults.object(forKey: "timeOfLastUpdate") as? Date {
+            timeOfLastUpdate = lastUpdate
+        }
+        
+        let storedRate = defaults.string(forKey: "bitcoinRate")
+        
+        if timeOfLastUpdate == nil || storedRate == nil || Date().timeIntervalSince(timeOfLastUpdate!) >= 3600 {
+            print("Updating the rate")
+            Task {
+                self.rate = await getBtcRateData() ?? ""
+                defaults.set(Date(), forKey: "timeOfLastUpdate")
+                defaults.set(self.rate, forKey: "bitcoinRate")
+                DispatchQueue.main.async {
+                    self.btcRateLbl.text = "$ \(self.rate)"
+                }
+            }
+        } else {
+            print("No need to update, get from the user defaults")
+            self.rate = storedRate ?? "0"
+            self.btcRateLbl.text = "$ \(self.rate)"
+        }
     }
 }
 
