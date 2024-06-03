@@ -12,6 +12,8 @@ class TransactionTableViewCell: UITableViewCell {
     static let cellIdentifier = "transactionCell"
     
     private var transaction: Transaction?
+    private let topAnchorConstant = 10
+    private let sideAnchorConstant = 15
     
     // MARK: - UI elements
     private let transactionDate = UILabel()
@@ -41,8 +43,8 @@ class TransactionTableViewCell: UITableViewCell {
         contentView.addSubview(category)
         
         NSLayoutConstraint.activate([
-            category.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            category.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15)
+            category.topAnchor.constraint(equalTo: contentView.topAnchor, constant: CGFloat(topAnchorConstant)),
+            category.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -CGFloat(sideAnchorConstant))
         ])
     }
     
@@ -58,8 +60,8 @@ class TransactionTableViewCell: UITableViewCell {
         contentView.addSubview(transactionDate)
 
         NSLayoutConstraint.activate([
-            transactionDate.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            transactionDate.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15)
+            transactionDate.topAnchor.constraint(equalTo: contentView.topAnchor, constant: CGFloat(topAnchorConstant)),
+            transactionDate.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(sideAnchorConstant))
         ])
     }
     

@@ -205,7 +205,7 @@ class BalanceViewController: UIViewController {
     }
     
     private func fetchTransactions() {
-        if transactionOffset % 20 == 0 {
+        if transactionOffset % transactionsLimit == 0 {
             if let fetchedTransactions = CoreDataManager.shared.fetchTransactions(limit: transactionsLimit, offset: transactionOffset) {
                 if !fetchedTransactions.isEmpty {
                     transactions += fetchedTransactions
@@ -259,8 +259,9 @@ class BalanceViewController: UIViewController {
         }
         
         let storedRate = defaults.string(forKey: "bitcoinRate")
+        let oneHourInSeconds = 3600.0
         
-        if timeOfLastUpdate == nil || storedRate == nil || Date().timeIntervalSince(timeOfLastUpdate!) >= 3600 {
+        if timeOfLastUpdate == nil || storedRate == nil || Date().timeIntervalSince(timeOfLastUpdate!) >= oneHourInSeconds {
             Task {
                 self.rate = await getBtcRateData() ?? ""
                 defaults.set(Date(), forKey: "timeOfLastUpdate")

@@ -19,7 +19,10 @@ class ApiBitcoinManager {
         }
     
         do {
-            let (btcRateResponse, _) = try await URLSession.shared.data(from: url)
+            let (btcRateResponse, response) = try await URLSession.shared.data(from: url)
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                throw ApiErrors.serverError("Server responded with an error")
+            }
             let decoder = JSONDecoder()
             do {
                 let decodedData = try decoder.decode(ApiResponse.self, from: btcRateResponse)

@@ -15,6 +15,7 @@ class CoreDataManager {
     
     let context = (UIApplication.shared.delegate as!
                    AppDelegate).persistentContainer.viewContext
+    private let sortingKey = "date"
     
     func fetchBalance() -> Balance? {
          let fetchRequest: NSFetchRequest<Balance> = Balance.fetchRequest()
@@ -36,7 +37,7 @@ class CoreDataManager {
             let fetchRequest: NSFetchRequest<Transaction> = Transaction.fetchRequest()
             fetchRequest.fetchLimit = limit
             fetchRequest.fetchOffset = offset
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: sortingKey, ascending: false)]
             
             do {
                 let fetchedTransactions = try context.fetch(fetchRequest)
