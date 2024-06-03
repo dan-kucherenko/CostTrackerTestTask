@@ -187,6 +187,7 @@ class BalanceViewController: UIViewController {
         present(replenishBalanceController, animated: true, completion: nil)
     }
     
+    // MARK: - Fetch balance func
     private func fetchBalance() {
         self.balance = CoreDataManager.shared.fetchBalance()
         
@@ -204,6 +205,7 @@ class BalanceViewController: UIViewController {
         }
     }
     
+    // MARK: - Fetch transactions and group them
     private func fetchTransactions() {
         if transactionOffset % transactionsLimit == 0 {
             if let fetchedTransactions = CoreDataManager.shared.fetchTransactions(limit: transactionsLimit, offset: transactionOffset) {
@@ -242,6 +244,7 @@ class BalanceViewController: UIViewController {
         present(wrongAlertController, animated: true, completion: nil)
     }
     
+    // MARK: - Additional func to add transaction in core data
     private func createTransaction(amount: Double, category: String, date: Date = Date()) {
         let transaction = Transaction(context: CoreDataManager.shared.context)
         transaction.amount = amount
@@ -251,6 +254,7 @@ class BalanceViewController: UIViewController {
         CoreDataManager.shared.saveContext()
     }
     
+    // MARK: - Update the btc rate if there is a need to do so
     private func updateBtcRate() {
         let defaults = UserDefaults.standard
         
