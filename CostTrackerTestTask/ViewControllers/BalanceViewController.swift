@@ -19,6 +19,7 @@ class BalanceViewController: UIViewController {
     private lazy var balanceStackView = UIStackView(arrangedSubviews: [balanceLbl, replenishBalanceBtn])
     private let addTransactionBtn = UIButton()
     private let transactionsTable = UITableView()
+    private let color = UIColor(named: "TextColor")
     
     
     // MARK: - Fields for view
@@ -38,8 +39,7 @@ class BalanceViewController: UIViewController {
     
     // MARK: - Setup view
     private func setupView() {
-        self.view.backgroundColor = .black
-        
+        self.view.backgroundColor = .secondarySystemBackground
         setupBtcRateLabel()
         setupBalanceLabel()
         setupTheStackView()
@@ -53,7 +53,7 @@ class BalanceViewController: UIViewController {
     // MARK: - Bitcoin rate label
     private func setupBtcRateLabel() {
         updateBtcRate()
-        btcRateLbl.textColor = .secondaryLabel
+        btcRateLbl.textColor = color
         btcRateLbl.font = .systemFont(ofSize: 20)
         
         self.view.addSubview(btcRateLbl)
@@ -87,14 +87,14 @@ class BalanceViewController: UIViewController {
     // MARK: - Bitcoin Balance label
     private func setupBalanceLabel() {
         balanceLbl.text = "0.0₿"
-        balanceLbl.textColor = .secondaryLabel
+        balanceLbl.textColor = color
         balanceLbl.font = .systemFont(ofSize: 50)
     }
     
     private func setupReplenishButton() {
         replenishBalanceBtn.setImage(UIImage(systemName: "plus.square"), for: .normal)
         replenishBalanceBtn.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 25, weight: .regular), forImageIn: .normal)
-        replenishBalanceBtn.tintColor = .white
+        replenishBalanceBtn.tintColor = color
         
         replenishBalanceBtn.addTarget(self, action: #selector(replenishBalance), for: .touchUpInside)
     }
@@ -104,9 +104,8 @@ class BalanceViewController: UIViewController {
         addTransactionBtn.setTitle("Add transaction", for: .normal)
         addTransactionBtn.titleLabel?.font = .systemFont(ofSize: 20, weight: .semibold)
         addTransactionBtn.setTitleColor(.secondaryLabel, for: .normal)
-        addTransactionBtn.backgroundColor = .white
         addTransactionBtn.layer.borderColor = UIColor.secondarySystemBackground.cgColor
-        addTransactionBtn.backgroundColor = .secondarySystemFill
+        addTransactionBtn.backgroundColor = color
         addTransactionBtn.layer.cornerRadius = 10
         
         addTransactionBtn.addTarget(self, action: #selector(addTransactionClicked), for: .touchUpInside)
@@ -123,7 +122,6 @@ class BalanceViewController: UIViewController {
     
     // MARK: - Transactions table configuration
     private func setupTransactionsTable() {
-        transactionsTable.backgroundColor = .black
         transactionsTable.register(TransactionTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         
         self.transactionsTable.delegate = self

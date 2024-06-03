@@ -22,7 +22,7 @@ class AddTransactionViewController: UIViewController {
     }
     
     private func setupView() {
-        self.view.backgroundColor = .black
+        self.view.backgroundColor = .secondarySystemBackground
         self.title = "Add transaction"
         setupInputField()
         setupCategoryPicker()

@@ -17,6 +17,7 @@ class TransactionTableViewCell: UITableViewCell {
     private let transactionDate = UILabel()
     private let category = UILabel()
     private let amount = UILabel()
+    private let color = UIColor(named: "TextColor")
     
     
     func configure(with transaction: Transaction) {
@@ -25,7 +26,6 @@ class TransactionTableViewCell: UITableViewCell {
     }
 
     private func setup() {
-        self.contentView.backgroundColor = .black
         setupTransactionDate()
         setupCategoryLabel()
         setupAmountLabel()
@@ -35,7 +35,7 @@ class TransactionTableViewCell: UITableViewCell {
     private func setupCategoryLabel() {
         category.text = transaction?.category
         category.font = .systemFont(ofSize: 20, weight: .semibold)
-        category.textColor = .white
+        category.textColor = color
         
         category.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(category)
@@ -52,7 +52,7 @@ class TransactionTableViewCell: UITableViewCell {
         transactionDate.text = date
         
         transactionDate.font = .systemFont(ofSize: 18, weight: .regular)
-        transactionDate.textColor = .white
+        transactionDate.textColor = color
         
         transactionDate.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(transactionDate)
@@ -73,7 +73,7 @@ class TransactionTableViewCell: UITableViewCell {
     private func setupAmountLabel() {
         amount.text = "\(String(describing: transaction!.amount)) ₿"
         amount.font = .systemFont(ofSize: 20, weight: .bold)
-        amount.textColor = .white
+        amount.textColor = color
         
         amount.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(amount)
