@@ -131,7 +131,7 @@ class BalanceViewController: UIViewController {
         self.view.addSubview(transactionsTable)
         
         NSLayoutConstraint.activate([
-            transactionsTable.topAnchor.constraint(equalTo: addTransactionBtn.bottomAnchor, constant: 5),
+            transactionsTable.topAnchor.constraint(equalTo: addTransactionBtn.bottomAnchor, constant: 15),
             transactionsTable.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
             transactionsTable.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             transactionsTable.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
@@ -206,12 +206,15 @@ class BalanceViewController: UIViewController {
     }
     
     private func fetchTransactions() {
-        if let fetchedTransactions = CoreDataManager.shared.fetchTransactions(limit: transactionsLimit, offset: transactionOffset) {
-            if !fetchedTransactions.isEmpty {
-                transactions += fetchedTransactions
-                transactionOffset += fetchedTransactions.count
-                DispatchQueue.main.async {
-                    self.transactionsTable.reloadData()
+        if transactionOffset % 20 == 0 {
+            print("Loading more transactions with offset \(transactionOffset)")
+            if let fetchedTransactions = CoreDataManager.shared.fetchTransactions(limit: transactionsLimit, offset: transactionOffset) {
+                if !fetchedTransactions.isEmpty {
+                    transactions += fetchedTransactions
+                    transactionOffset += fetchedTransactions.count
+                    DispatchQueue.main.async {
+                        self.transactionsTable.reloadData()
+                    }
                 }
             }
         }
@@ -241,7 +244,14 @@ class BalanceViewController: UIViewController {
 
 // MARK: - UITableViewDelegate
 extension BalanceViewController: UITableViewDelegate {
-    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        
+        if offsetY > contentHeight - scrollView.frame.size.height {
+            fetchTransactions()
+        }
+    }
 }
 
 // MARK: - UITableViewDataSource
