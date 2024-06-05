@@ -41,7 +41,8 @@ class AddTransactionViewController: UIViewController {
         self.view.addSubview(transactionAmountField)
         
         NSLayoutConstraint.activate([
-            transactionAmountField.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            transactionAmountField.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 50),
+            transactionAmountField.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -50),
             transactionAmountField.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 90)
         ])
     }

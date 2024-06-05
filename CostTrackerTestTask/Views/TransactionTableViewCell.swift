@@ -20,6 +20,7 @@ class TransactionTableViewCell: UITableViewCell {
     private let category = UILabel()
     private let amount = UILabel()
     private let color = UIColor(named: "TextColor")
+    private lazy var categoryTransactionDateStack = UIStackView(arrangedSubviews: [category, transactionDate])
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -34,9 +35,25 @@ class TransactionTableViewCell: UITableViewCell {
     }
 
     private func setup() {
+        setupStackView()
+        setupAmountLabel()
+    }
+    
+    private func setupStackView() {
         setupTransactionDate()
         setupCategoryLabel()
-        setupAmountLabel()
+        
+        categoryTransactionDateStack.axis = .vertical
+        categoryTransactionDateStack.spacing = 5
+        categoryTransactionDateStack.alignment = .leading
+        
+        categoryTransactionDateStack.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(categoryTransactionDateStack)
+        
+        NSLayoutConstraint.activate([
+            categoryTransactionDateStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            categoryTransactionDateStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(sideAnchorConstant)),
+        ])
     }
     
     // MARK: - Setup the category
@@ -46,12 +63,6 @@ class TransactionTableViewCell: UITableViewCell {
         category.textColor = color
         
         category.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(category)
-        
-        NSLayoutConstraint.activate([
-            category.topAnchor.constraint(equalTo: contentView.topAnchor, constant: CGFloat(topAnchorConstant)),
-            category.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -CGFloat(sideAnchorConstant))
-        ])
     }
     
     // MARK: - Setup the date
@@ -61,14 +72,8 @@ class TransactionTableViewCell: UITableViewCell {
         
         transactionDate.font = .systemFont(ofSize: 15, weight: .regular)
         transactionDate.textColor = color
-        
-        transactionDate.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(transactionDate)
 
-        NSLayoutConstraint.activate([
-            transactionDate.topAnchor.constraint(equalTo: contentView.topAnchor, constant: CGFloat(topAnchorConstant)),
-            transactionDate.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CGFloat(sideAnchorConstant))
-        ])
+        transactionDate.translatesAutoresizingMaskIntoConstraints = false
     }
     
     private func formatDate(_ date: Date) -> String {
@@ -82,13 +87,16 @@ class TransactionTableViewCell: UITableViewCell {
         amount.text = "\(String(describing: transaction!.amount)) ₿"
         amount.font = .systemFont(ofSize: 20, weight: .bold)
         amount.textColor = color
+        amount.textAlignment = .center
+        
         
         amount.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(amount)
         
         NSLayoutConstraint.activate([
             amount.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            amount.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
+            amount.leadingAnchor.constraint(equalTo: categoryTransactionDateStack.trailingAnchor, constant: CGFloat(sideAnchorConstant)),
+            amount.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -CGFloat(sideAnchorConstant))
         ])
     }
 }

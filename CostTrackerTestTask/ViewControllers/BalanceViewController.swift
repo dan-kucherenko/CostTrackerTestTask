@@ -79,8 +79,9 @@ class BalanceViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             replenishBalanceBtn.widthAnchor.constraint(equalToConstant: 30),
+            replenishBalanceBtn.trailingAnchor.constraint(lessThanOrEqualTo: self.view.trailingAnchor, constant: -30),
             balanceStackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            balanceStackView.topAnchor.constraint(equalTo: btcRateLbl.bottomAnchor, constant: 40)
+            balanceStackView.topAnchor.constraint(equalTo: btcRateLbl.bottomAnchor, constant: 40),
         ])
     }
     
@@ -89,6 +90,7 @@ class BalanceViewController: UIViewController {
         balanceLbl.text = "0.0₿"
         balanceLbl.textColor = color
         balanceLbl.font = .systemFont(ofSize: 50)
+        balanceLbl.numberOfLines = 0
     }
     
     private func setupReplenishButton() {
@@ -295,6 +297,10 @@ extension BalanceViewController: UITableViewDelegate {
 
 // MARK: - UITableViewDataSource
 extension BalanceViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return sortedSectionKeys.count
     }
